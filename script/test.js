@@ -87,11 +87,8 @@ window.addEventListener('keydown', function() {
   //console.log("dfghjkll;lkjhghyui");
   if (html === document.activeElement) {
     //console.log("active");
-    document.onkeydown = keyPressed;
-    if (keyhtml == 38 || keyhtml == 40) {
-      console.log(3840);
-      htmlCode()
-    }
+    console.log(3840);
+    htmlCode()
   }
 });
 
