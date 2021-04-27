@@ -64,13 +64,10 @@ function htmlCode() {
     i++
   }
   document.querySelector(".user_code_html_n").innerHTML = span
-  // let scroll = html.pageYOffset || html.scrollTop
-  console.log(scroll);
-  //document.querySelector(".user_code_html_n").scroll(0, scroll)
-  // if (oldScroll < scroll) {
-  //   document.querySelector(".user_code_html_n").scrollTop += scroll
-  //   oldScroll = scroll
-  // }
+  let scroll = html.pageYOffset || html.scrollTop;
+  //console.log(scroll);
+  document.querySelector(".user_code_html_n").scroll(0, scroll)
+  cssCode()
 }
 let keyhtml;
 function keyPressed(e) {
@@ -87,9 +84,9 @@ html.oninput = function funhtml() {
   htmlCode()
 }
 window.addEventListener('keydown', function() {
-  console.log("dfghjkll;lkjhghyui");
-  if (html.activeElement) {
-    console.log("active");
+  //console.log("dfghjkll;lkjhghyui");
+  if (html === document.activeElement) {
+    //console.log("active");
     document.onkeydown = keyPressed;
     if (keyhtml == 38 || keyhtml == 40) {
       console.log(3840);
@@ -98,7 +95,7 @@ window.addEventListener('keydown', function() {
   }
 });
 
-//document.getElementById('some-focusable') === document.activeElement
+
 
 function cssCode() {
   //console.log("css");
@@ -113,33 +110,34 @@ function cssCode() {
     i++
   }
   document.querySelector(".user_code_css_n").innerHTML = span
-  let scroll =  css.scrollTop;
-  let x = css.offsetHeight;
-  //console.log(scroll);
-  document.querySelector(".user_code_css_n").scrollBy(0, scroll)
+  let scroll =  css.pageYOffset || css.scrollTop;
+  console.log(scroll);
+  document.querySelector(".user_code_css_n").scroll(0, scroll)
 }
-//let keycss;
+let keycss;
 cssCode()
 css.oninput = function () {
   cssCode()
 }
-// function csskeyPressed(e) {
-// 	let keyCode;
-// 	if (window.event) {
-// 		keyCode = window.event.keyCode;
-// 	} else if (e) {
-// 		keyCode = e.which;
-// 	}
-//   keycss = keyCode;
-// }
-// window.addEventListener('keydown', function() {
-//   if (css.focus) {
-//     document.onkeydown = csskeyPressed;
-//     if (keycss == 38 || keycss == 40) {
-//       cssCode()
-//     }
-//   }
-// });
+function csskeyPressed(e) {
+	let keyCode;
+	if (window.event) {
+		keyCode = window.event.keyCode;
+	} else if (e) {
+		keyCode = e.which;
+	}
+  keycss = keyCode;
+}
+window.addEventListener('keydown', function() {
+  if (css === document.activeElement) {
+    console.log("active");
+    document.onkeydown = csskeyPressed;
+    if (keycss == 38 || keycss == 40) {
+      console.log("38");
+      cssCode()
+    }
+  }
+});
 
 function jscode() {
   let parents = document.querySelector(".right_side_of_code")
@@ -179,12 +177,31 @@ function jscode() {
   document.querySelector(".user_code_js_n").innerHTML = span
   let scroll = js.pageYOffset || js.scrollTop
   console.log(scroll);
-  document.querySelector(".user_code_js_n").scrollBy(0, scroll)
+  document.querySelector(".user_code_js_n").scroll(0, scroll)
 }
-//jscode()
+let keyjs;
 js.oninput = function () {
   jscode()
 }
+function jskeyPressed(e) {
+	let keyCode;
+	if (window.event) {
+		keyCode = window.event.keyCode;
+	} else if (e) {
+		keyCode = e.which;
+	}
+  keyjs = keyCode;
+}
+window.addEventListener('keydown', function() {
+  if (js === document.activeElement) {
+    console.log("active");
+    document.onkeydown = jskeyPressed;
+    if (keyjs == 38 || keyjs == 40) {
+      console.log("38");
+      jscode()
+    }
+  }
+});
 // js.addEventListener("change", e => {
 //   jscode()
 // });
