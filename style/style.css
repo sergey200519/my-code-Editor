@@ -110,6 +110,7 @@ button:focus, button:hover {
   padding: 10px;
   resize: none;
   font-size: var(--font-size);
+  line-height: var(--line_n);
 }
 .right_side_of_code_inner {
   padding: 0;
