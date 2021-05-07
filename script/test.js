@@ -311,7 +311,6 @@ function percent() {
 
   let jsP = (jsN / sum).toFixed(2);
   document.querySelector(".js-percent").innerHTML = jsP + "%";
-  jscode()
 }
 
 //--------------------------------------------------------------------------------
