@@ -210,10 +210,8 @@ document.querySelector(".on-off").addEventListener('click', function() {
 });
 
 function setting(earlyExit) {
-  document.documentElement.style.setProperty("--transition-on_off", "1s")
   let widthOnOff = document.querySelector(".popap_settings").offsetWidth - 25;
   if (earlyExit) {
-    document.documentElement.style.setProperty("--transition-on_off", "0s");
     document.documentElement.style.setProperty("--left-pos_on-off", widthOnOff + "px");
     return "";
   }
