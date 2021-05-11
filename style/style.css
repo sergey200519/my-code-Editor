@@ -17,7 +17,7 @@
   --type-pos_settings: fixed;
   --display-on: inline-block;
   --left-pos_on-off: -25px;
-  --transition-on_off: 1s;
+  --transition-on_off: 0s;
   --cursor-on_off: e-resize;
   --cross: "\00D7";
   --plus: "+"
