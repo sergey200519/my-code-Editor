@@ -31,6 +31,9 @@ body {
   font-size: var(--font-size);
   font-family: 'Roboto', sans-serif;
 }
+a {
+  color: inherit;
+}
 h1 {
   font-size: 2.5rem;
   margin: 10px 0 15px 0;
