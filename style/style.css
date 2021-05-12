@@ -124,9 +124,11 @@ button:focus, button:hover {
 .user_code_html_n span,
 .user_code_css_n span,
 .user_code_js_n span {
-  padding-left: 12px;
+  padding-left: 10px;
   border-top: 1px solid black;
   height: var(--line_h);
+  text-align: right;
+  margin-right: 5px;
 }
 .user_code_html,
 .user_code_css,
