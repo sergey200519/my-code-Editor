@@ -20,6 +20,63 @@ function unification() {
   iframex.contentWindow.document.close();
 }
 
+function addingLi(arr, type) {
+  let answer = "";
+  let n = arr.length;
+  let i = 0;
+  while (i < n) {
+    answer += "<li class=\"" + type + "_snippets_li-" + i + "\"></li>";
+    i++
+  }
+  return answer;
+}
+
+function addingSnippets(arr, classs) {
+  let n = arr.length;
+  let i = 0;
+  while (i < n) {
+    document.querySelector(classs + i).innerText = arr[i][1] + " => " + arr[i][0];
+    i++
+  }
+}
+
+function searchmy(input, classs) {
+  let value = input.value.trim();
+	let list = document.querySelectorAll(classs);
+	if (value) {
+		list.forEach(elem => {
+			if (elem.innerText.search(value) == -1) {
+				elem.classList.add('none');
+			}
+		});
+	} else {
+		list.forEach(elem => {
+			elem.classList.remove('none');
+		});
+	}
+
+}
+
+function popap(text) {
+  document.querySelector(".popap_p").innerText = text;
+  document.documentElement.style.setProperty("--top_popap", "15px");
+  function des() {
+    document.documentElement.style.setProperty("--top_popap", "-115px");
+  }
+  setTimeout(des, 5000);
+}
+
+function StingToArray(s) {
+  let answer = [];
+  let n = s.length;
+  let i = 0;
+  while (i < n) {
+    answer[i] = s[i];
+    i++
+  }
+  return answer;
+}
+
 function arrayToString(a) {
   let answer = ""
   let n = a.length
@@ -33,24 +90,25 @@ function arrayToString(a) {
 
 function substringSearch(s, sear) {
   const n = s.length
-  let nsear = sear.length
+  const nsear = sear.length
   let i = 0
-  while (i + nsear <= n) {
+  while (i < n) {
+    let match = false
     if (s[i] == sear[0]) {
-      let time = 0
       let j = 0
-      while (j < nsear) {
-        if (s[i] == sear[j]) {
-          time++
-        }
+      while (j < nsear && s[i] == sear[j]) {
         i++
         j++
       }
-      if (time == nsear) {
+      if (j == nsear) {
         return i
+      } else {
+        match = true
       }
     }
-    i++
+    if (match == false) {
+      i++
+    }
   }
   return false
 }
@@ -60,7 +118,7 @@ function strN(from, address) {
   let span = "";
   let i = 1;
   while (i <= n) {
-    span += "<span>" + String(i) + "</span>";
+    span += String(i) + "\n";
     i++
   }
   document.querySelector(address).innerHTML = span;
@@ -80,8 +138,92 @@ htmlCode();
 html.oninput = function funhtml() {
   htmlCode();
 }
-html.addEventListener('keydown', function() {
+html.addEventListener('keyup', function() {
   htmlCode();
+
+});
+function func(events) {
+	code = String.fromCharCode(events.keyCode);
+	key = String.fromCharCode(events.keyCode);
+  return code.charCodeAt(0);
+	//result.innerHTML = 'Код: '+code + ', клавиша' + key;
+}
+function snippets(link, linkarr) {
+  if (document.activeElement == link) {
+    let start = link.selectionStart;
+    let end = link.selectionEnd;
+    if (start == end) {
+      let i = start - 1;
+      while (i > 0) {
+        if (link.value[i] == " " || link.value[i] == ">" || link.value[i] == ";" || link.value[i] == "\n") {
+          break
+        }
+        i = i - 1;
+      }
+      let answer = "";
+      i++
+      while (i <= start - 1) {
+        answer += link.value[i];
+        i++
+      }
+      if (i == start) {
+        //console.log("=");
+      }
+      let j = 0;
+      while (j < linkarr.length) {
+        if (answer == linkarr[j][0]) {
+          return linkarr[j];
+
+        }
+        j++
+      }
+      //console.log(answer, "keyword", html.value[start], i, start, answer.length);
+      return "";
+    }
+  }
+}
+function paste(s, address, npaste) {
+  let selectionStartEnd = address.selectionStart;
+  console.log("tab", selectionStartEnd);
+  let arr = StingToArray(address.value);
+  if (s == "  ") {
+    arr[selectionStartEnd - 1] += s;
+    address.value = arrayToString(arr);
+    address.selectionEnd = selectionStartEnd + s.length;
+    address.selectionStart = selectionStartEnd + s.length;
+  } else {
+    console.log(npaste);
+    let i = 0;
+    let del = selectionStartEnd - npaste;
+    while (i < npaste) {
+      arr[del] = "";
+      del++
+      console.log(del, selectionStartEnd, "185wasd");
+      i++
+    }
+    arr[selectionStartEnd - npaste - 1] += s;
+    address.value = arrayToString(arr);
+    address.selectionEnd = selectionStartEnd + s.length - npaste;
+    address.selectionStart = selectionStartEnd + s.length - npaste;
+  }
+
+}
+html.addEventListener("keydown", function (e) {
+  let res = func(e);
+  if (res == 9) {
+    e.preventDefault();
+    let wordBefore = snippets(html, htmlSnippets);
+    console.log(wordBefore, "word");
+    if (wordBefore == "") {
+      paste("  ", html);
+    } else {
+      paste(wordBefore[1], html, wordBefore[0].length)
+    }
+  }
+  //console.log(res);
+});
+document.addEventListener("selectionchange", function () {
+  snippets()
 });
 
 
@@ -103,22 +245,48 @@ css.oninput = function () {
 css.addEventListener('keydown', function() {
   cssCode()
 });
+css.addEventListener("keydown", function (e) {
+  let res = func(e);
+  if (res == 9) {
+    e.preventDefault();
+    let wordBefore = snippets(css, cssSnippets);
+    if (wordBefore == "") {
+      paste("  ", css);
+    } else {
+      paste(wordBefore[1], css, wordBefore[0].length)
+    }
+  }
+});
+
+
 
 function jscode() {
-  unification()
-  strN(js, ".user_code_js_n")
-  let scroll = js.pageYOffset || js.scrollTop
-  document.querySelector(".user_code_js_n").scroll(0, scroll)
-  percent()
-  cssCode()
+  unification();
+  strN(js, ".user_code_js_n");
+  let scroll = js.pageYOffset || js.scrollTop;
+  document.querySelector(".user_code_js_n").scroll(0, scroll);
+  percent();
+  cssCode();
 }
+strN(js, ".user_code_js_n");
 js.oninput = function () {
   jscode()
 }
 js.addEventListener('keydown', function() {
   jscode()
 });
-
+js.addEventListener("keydown", function (e) {
+  let res = func(e);
+  if (res == 9) {
+    e.preventDefault();
+    let wordBefore = snippets(js, jsSnippets);
+    if (wordBefore == "") {
+      paste("  ", js);
+    } else {
+      paste(wordBefore[1], js, wordBefore[0].length)
+    }
+  }
+});
 //------------------------------------------------------------------------------------------
 
 let inputFontSize = document.querySelector(".font-size_input");
@@ -136,12 +304,7 @@ btn.addEventListener("click", e => {
   let answer = "<!DOCTYPE html>"
   answer += iframemy.contentWindow.document.querySelector('html').outerHTML
   navigator.clipboard.writeText(answer)
-  document.documentElement.style.setProperty("--top_popap", "15px")
-  function des() {
-    document.documentElement.style.setProperty("--top_popap", "-115px")
-  }
-  setTimeout(des, 2000)
-  // pre.innerText = answer
+  popap("Текст успешно скопирован в буфер обмена")
 });
 
 window.onload = function(){
@@ -184,14 +347,14 @@ function funWidth_preview() {
     document.documentElement.style.setProperty("--flex", "column-reverse")
     document.documentElement.style.setProperty("--width_preview", "100%")
     document.querySelector(".width_preview_in_html").value = windowWidth;
-    alert("Ширина окна браузеpа соответственно максимальная ширина экрана ровна: " + windowWidth + "px")
+    popap("Ширина окна браузеpа соответственно максимальная ширина экрана ровна: " + windowWidth + "px");
   }
   if (width < 300) {
     document.documentElement.style.setProperty("--width_preview", "300px")
     let delta = windowWidth - document.querySelector(".right_side_of_code_inner").offsetWidth - width_n;
     //document.documentElement.style.setProperty("--width_left", delta + "px")
     document.querySelector(".width_preview_in_html").value = 300;
-    alert("Минимальная ширина экрана 300px")
+    popap("Минимальная ширина экрана 300px")
   }
 }
 
@@ -225,7 +388,7 @@ function setting(earlyExit) {
     document.documentElement.style.setProperty("--type-pos_settings", "inherit");
     document.documentElement.style.setProperty("--pos_settings", "0");
     oldPos = true;
-    console.log(widthOnOff);
+    //console.log(widthOnOff);
     document.documentElement.style.setProperty("--left-pos_on-off", widthOnOff + "px");
     document.documentElement.style.setProperty("--cursor-on_off", "w-resize")
 
@@ -316,7 +479,6 @@ function percent() {
 function framework(link) {
   let answer = link + js.value;
   js.value = answer;
-  percent();
 }
 document.querySelector(".bootstrap").addEventListener("click", function () {
   framework('<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script')
@@ -327,5 +489,64 @@ document.querySelector(".vue").addEventListener("click", function () {
 document.querySelector(".react").addEventListener("click", function () {
   framework('<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script><script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script><script src="like_button.js"></script>')
 });
+
+//------------------------------------------------------------------------------------
+
+document.querySelector(".html_snippets_ul").innerHTML = addingLi(htmlSnippets, "html");
+addingSnippets(htmlSnippets, ".html_snippets_li-")
+document.querySelector(".html_snippets_input").oninput = function () {
+  searchmy(document.querySelector(".html_snippets_input"), ".html_snippets_ul li")
+}
+//-------_______---------
+document.querySelector(".css_snippets_ul").innerHTML = addingLi(cssSnippets, "css");
+addingSnippets(cssSnippets, ".css_snippets_li-")
+document.querySelector(".css_snippets_input").oninput = function () {
+  searchmy(document.querySelector(".css_snippets_input"), ".css_snippets_ul li")
+}
+//-------_______---------
+document.querySelector(".js_snippets_ul").innerHTML = addingLi(jsSnippets, "js");
+addingSnippets(jsSnippets, ".js_snippets_li-")
+document.querySelector(".js_snippets_input").oninput = function () {
+  searchmy(document.querySelector(".js_snippets_input"), ".js_snippets_ul li")
+}
+
+//-----------------------------------------------------------------------------------------
+
+function new_snippets(link, array) {
+  let arr = Array(document.querySelector(".new_snippets_" + link + "_input").value);
+  arr[1] = document.querySelector(".new_snippets_" + link + "_input2").value;
+  if (arr[0] != "" && arr[1] != "") {
+    array.push(arr);
+    popap("Снипет создан успешно")
+  } else {
+    popap("Оба поля должны быть заполнены")
+  }
+}
+document.querySelector(".new_snippets_html_button").addEventListener("click", function () {
+  new_snippets("html", htmlSnippets)
+});
+document.querySelector(".new_snippets_css_button").addEventListener("click", function () {
+  new_snippets("css", cssSnippets)
+});
+document.querySelector(".new_snippets_js_button").addEventListener("click", function () {
+  new_snippets("js", jsSnippets)
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //end
