@@ -22,6 +22,9 @@
   --cross: "\00D7";
   --plus: "+"
 }
+a {
+  color: inherit;
+}
 *,
 body {
   -webkit-box-sizing: border-box;
@@ -31,20 +34,22 @@ body {
   font-size: var(--font-size);
   font-family: 'Roboto', sans-serif;
 }
-a {
-  color: inherit;
-}
 h1 {
   font-size: 2.5rem;
   margin: 10px 0 15px 0;
 }
 h2 {
   font-size: 2rem;
-  margin: 20px 0 15px 0;
+  margin: 25px 0 15px 0;
 }
 input, textarea, button {
   font-size: var(--font-size);
   line-height: var(--line_n);
+}
+textarea {
+  font-family: 'Roboto Mono', monospace;
+  padding: 10px;
+  resize: none;
 }
 .none {
   display: none;
@@ -114,24 +119,10 @@ button:focus, button:hover {
 .user_code_html_n,
 .user_code_css_n,
 .user_code_js_n {
-  display: -webkit-flex;
-  display: -ms-flex;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  padding-top: 8px;
+  border-right: 0;
+  border-left: 0;
   width: var(--width_n);
   overflow: auto;
-}
-.user_code_html_n span,
-.user_code_css_n span,
-.user_code_js_n span {
-  padding-left: 10px;
-  border-top: 1px solid black;
-  height: var(--line_h);
-  text-align: right;
-  margin-right: 5px;
 }
 .user_code_html,
 .user_code_css,
@@ -139,7 +130,6 @@ button:focus, button:hover {
   display: inline-block;
   width: var(--width_code);
   height: 100%;
-  padding: 10px;
   resize: none;
   font-size: var(--font-size);
 }
@@ -207,9 +197,10 @@ body {
   top: 0;
   left: var(--pos_settings);
   /* width: 30%; */
-  height: 100%;
+  height: 100vh;
   background: rgb(19, 20, 20);
   transition: 1s all;
+  overflow: auto;
 }
 .popap_settings input,
 .popap_settings p {
@@ -248,10 +239,16 @@ body {
   display: inline;
 }
 
-
-
-
-
+.snippets_box {
+  margin-bottom: 45px;
+}
+.snippets_box div {
+  max-height: 120px;
+  overflow: hidden;
+}
+.snippets_box li {
+  margin-bottom: 10px;
+}
 
 
 
