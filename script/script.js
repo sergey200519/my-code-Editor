@@ -1,19 +1,57 @@
-let html = document.querySelector(".user_code_html")
-let css = document.querySelector(".user_code_css")
-let js = document.querySelector(".user_code_js")
+if (document.body.offsetWidth < 450) {
+  alert("Ширина браузера слишком мала для коимфортной работы.");
+}
+
+let html = document.querySelector(".user_code_html");
+let css = document.querySelector(".user_code_css");
+let js = document.querySelector(".user_code_js");
 let iframemy = document.querySelector("#ifr");
+// function refresh() {
+//   let htmlvalue = html.value;
+//   let cssvalue = css.value;
+//   let jsvalue = js.value;
+//   let data_body = "html=" + htmlvalue + "css=" + cssvalue + "js=" + jsvalue;
+//
+//   fetch("index.php", {
+//   	method: "POST",
+//     body: data_body,
+//   	headers:{"content-type": "application/x-www-form-urlencoded"}
+//   }).then(
+//     (response) => {
+//       if (response.status !== 200) {
+//   			return Promise.reject();
+//       } else {
+//         iframemy.contentWindow.location.reload(true);
+//       }
+//           //return response.text()
+//   })
+//
+// }
+// html.oninput = function () {
+//   refresh()
+//   console.log("dfghjkl");
+// }
+// css.oninput = function () {
+//   refresh()
+// }
+// js.oninput = function () {
+//   refresh()
+// }
+
+
+
 
 function unification() {
   let teg = html.value;
   let js_code = js.value
   function script(h, js) {
     let id = substringSearch(h, "<body>")
-    //console.log(id)
     h = h.split("")
     h[id] = js_code + h[id]
     return arrayToString(h)
   }
-  teg = script(teg, js_code)
+  //console.log(js.value.replace(/console.log\(/g, "(function() {let console = {log: function(s) {alert(s)}}console.log("));
+  teg = script(teg, js_code);
   let iframex = document.querySelector("#ifr");
   iframex.contentWindow.document.open();
   iframex.contentWindow.document.write(teg);
@@ -66,7 +104,7 @@ function popap(text) {
   setTimeout(des, 5000);
 }
 
-function StingToArray(s) {
+function StringToArray(s) {
   let answer = [];
   let n = s.length;
   let i = 0;
@@ -126,22 +164,86 @@ function strN(from, address) {
 
 //---------------------------------------------------------------------------------------
 
+
+function nSpace(n) {
+  let answer = "";
+  let i = 0;
+  while (i < n - 1) {
+    answer += " ";
+    i++
+  }
+  return answer;
+}
+let nSpacelet = 0;
+function nSpaceFromBehind(s, p) {
+  nSpacelet = 0;
+  p -= 2
+  let status = true;
+  let answer = false;
+  let i = p;
+  while (i >= 0) {
+    if (s[i].charCodeAt(0) == 32) {
+      console.log("only");
+      answer = true;
+      status = false;
+    }
+    if (answer != true && s[i] == "\n") {
+      console.log("break", answer);
+      break
+    }
+    if (s[i] == " " && s[i - 1] == " ") {
+      nSpacelet += 1
+    }
+    i--
+  }
+  return answer;
+}
+function newlineRuleshtml(e, address) {
+  let res = func(e);
+  if (res == 13) {
+    let start = address.selectionStart;
+    let end = address.selectionEnd;
+    let code = StringToArray(address.value);
+    let tab = nSpaceFromBehind(code, start);
+    console.log(tab, start, code[start - 2], code[start - 1], code[start]);
+    if (tab) {
+      e.preventDefault();
+      let space = 0;
+      let i = start - 1;
+      while (i >= 0) {
+        if (code[i].charCodeAt(0) == 32 && code[i - 1].charCodeAt(0)  == 32) {
+          space += 1;
+        }
+        if (code[i] == "\n") {
+          break
+        }
+        i--
+      }
+      space = nSpace(space + 2);
+      code[start] = "\n" + space + code[start];
+      address.value = arrayToString(code)
+      address.selectionStart = start + space.length + 1;
+      address.selectionEnd = end + space.length + 1;
+    }
+  }
+}
+
 function htmlCode() {
   unification();
   strN(html, ".user_code_html_n");
   let scroll = html.pageYOffset || html.scrollTop;
   document.querySelector(".user_code_html_n").scroll(0, scroll);
-  percent()
+  percent();
   cssCode();
 }
 htmlCode();
 html.oninput = function funhtml() {
   htmlCode();
 }
-html.addEventListener('keyup', function() {
-  htmlCode();
-
-});
+// html.addEventListener('keyup', function() {
+//   htmlCode();
+//
+// });
 function func(events) {
 	code = String.fromCharCode(events.keyCode);
 	key = String.fromCharCode(events.keyCode);
@@ -182,10 +284,48 @@ function snippets(link, linkarr) {
     }
   }
 }
+function subFunctionDoubling(e, code, start, end, address, dup) {
+  e.preventDefault();
+  if (code[start] <= code.length && code[start + 1].charCodeAt(0) == 32) {
+    code[start] = dup;
+    code[start + 1] = "\n";
+  }else {
+    code[start - 1] = code[start - 1] + dup;
+  }
+  let n = code.length;
+  address.value = arrayToString(code);
+  address.selectionStart = start + 1;
+  address.selectionEnd = end + 1;
+}
+function doubling(e, address) {
+  //console.log('Строковый код: ', event.code);
+  let start = address.selectionStart;
+  let end = address.selectionEnd;
+  if (start == end) {
+    let code = StringToArray(address.value);
+    let key = e.charCode;
+    if (e.shiftKey && key == 34) {
+      subFunctionDoubling(e, code, start, end, address, '""');
+    }
+    if (key == 39) {
+      subFunctionDoubling(e, code, start, end, address, "''");
+    }
+    if (e.shiftKey && key == 40) {
+      subFunctionDoubling(e, code, start, end, address, "()");
+    }
+    if (e.shiftKey && key == 123) {
+      subFunctionDoubling(e, code, start, end, address, "{}");
+    }
+    if (key == 91) {
+      subFunctionDoubling(e, code, start, end, address, "[]");
+    }
+  }
+}
+
 function paste(s, address, npaste) {
   let selectionStartEnd = address.selectionStart;
   console.log("tab", selectionStartEnd);
-  let arr = StingToArray(address.value);
+  let arr = StringToArray(address.value);
   if (s == "  ") {
     arr[selectionStartEnd - 1] += s;
     address.value = arrayToString(arr);
@@ -206,7 +346,6 @@ function paste(s, address, npaste) {
     address.selectionEnd = selectionStartEnd + s.length - npaste;
     address.selectionStart = selectionStartEnd + s.length - npaste;
   }
-
 }
 html.addEventListener("keydown", function (e) {
   let res = func(e);
@@ -220,14 +359,66 @@ html.addEventListener("keydown", function (e) {
       paste(wordBefore[1], html, wordBefore[0].length)
     }
   }
-  //console.log(res);
+  newlineRuleshtml(e, html);
+});
+html.addEventListener("keypress", function (event) {
+ doubling(event, html);
 });
 document.addEventListener("selectionchange", function () {
   snippets()
 });
 
 
-
+function newlineRules(e, address) {
+  let res = func(e);
+  if (res == 13) {
+    let start = address.selectionStart;
+    let end = address.selectionEnd;
+    let code = StringToArray(address.value);
+    let status = false;
+    let substatus = 0;
+    let i = start;
+    let tab = nSpaceFromBehind(code, start);
+    while (i >= 0) {
+      if (code[i - 1] == ";") {
+        status = true;
+        substatus = 3;
+        break
+      }
+      if (code[start - 1] == "{" && nSpacelet == 0) {
+        substatus = 3;
+        status = true;
+        tab = true;
+        break
+      }
+      if (code[start - 1] == "{") {
+        substatus = nSpacelet;
+        status = true;
+        tab = false;
+        break
+      }
+      if (code[i] == " ") {
+        substatus += 1;
+      }
+      if (substatus >= 1 && code[i] != " ") {
+        status = true;
+        break
+      }
+      if (substatus < 1 && code[i] == "\n") {
+        break
+      }
+      i--
+    }
+    if (status && tab) {
+      let space = nSpace(substatus);
+      e.preventDefault();
+      code[start + 1] = space + "\n" + code[start + 1];
+      address.value = arrayToString(code);
+      address.selectionStart = start + space.length + 1;
+      address.selectionEnd = end + space.length + 1;
+    }
+  }
+}
 function cssCode() {
   //console.log("css");
   let teg = css.value
@@ -256,6 +447,10 @@ css.addEventListener("keydown", function (e) {
       paste(wordBefore[1], css, wordBefore[0].length)
     }
   }
+  newlineRules(e, css);
+});
+css.addEventListener("keypress", function (event) {
+ doubling(event, css);
 });
 
 
@@ -286,7 +481,12 @@ js.addEventListener("keydown", function (e) {
       paste(wordBefore[1], js, wordBefore[0].length)
     }
   }
+  newlineRules(e, js);
 });
+js.addEventListener("keypress", function (event) {
+ doubling(event, js);
+});
+
 //------------------------------------------------------------------------------------------
 
 let inputFontSize = document.querySelector(".font-size_input");
@@ -319,7 +519,15 @@ document.querySelector(".width_preview_in_html").value = width;
 window.onresize = function(event) {
   let widthr = document.querySelector(".right_side_of_code_inner").offsetWidth;
   document.querySelector(".width_preview_in_html").value = widthr;
-  funWidth_preview()
+  funWidth_preview();
+  if (document.body.offsetWidth < 450) {
+    alert("Ширина браузера слишком мала для коимфортной работы.");
+  }
+  let widthOnOff = document.querySelector(".popap_settings").offsetWidth - 25;
+  document.documentElement.style.setProperty("--type-pos_settings", "fixed");
+  document.documentElement.style.setProperty("--pos_settings", "-" + (widthOnOff + 25) + "px");
+  document.documentElement.style.setProperty("--left-pos_on-off", "-25px");
+  document.documentElement.style.setProperty("--cursor-on_off", "e-resize")
 };
 
 
@@ -371,9 +579,8 @@ document.querySelector(".on-off").addEventListener('click', function() {
   setting(false)
   funWidth_preview()
 });
-
+let widthOnOff = document.querySelector(".popap_settings").offsetWidth - 25;
 function setting(earlyExit) {
-  let widthOnOff = document.querySelector(".popap_settings").offsetWidth - 25;
   if (earlyExit) {
     document.documentElement.style.setProperty("--left-pos_on-off", widthOnOff + "px");
     return "";
@@ -383,13 +590,14 @@ function setting(earlyExit) {
     document.documentElement.style.setProperty("--pos_settings", "-" + (widthOnOff + 25) + "px");
     document.documentElement.style.setProperty("--left-pos_on-off", "-25px");
     document.documentElement.style.setProperty("--cursor-on_off", "e-resize")
+    console.log("on");
     oldPos = false;
   }else {
     document.documentElement.style.setProperty("--type-pos_settings", "inherit");
     document.documentElement.style.setProperty("--pos_settings", "0");
     oldPos = true;
     //console.log(widthOnOff);
-    document.documentElement.style.setProperty("--left-pos_on-off", widthOnOff + "px");
+    document.documentElement.style.setProperty("--left-pos_on-off", (widthOnOff + 0) + "px");
     document.documentElement.style.setProperty("--cursor-on_off", "w-resize")
 
   }
@@ -531,6 +739,7 @@ document.querySelector(".new_snippets_css_button").addEventListener("click", fun
 document.querySelector(".new_snippets_js_button").addEventListener("click", function () {
   new_snippets("js", jsSnippets)
 });
+
 
 
 
