@@ -10,7 +10,7 @@
   --height: 100%;
   --shrink: 10000000000;
   --grow: 2;
-  --width_n: 8%;
+  --width_n: 15%;
   --width_code: 92%;
   --top_popap: -115px;
   --pos_settings: -1000px;
@@ -201,6 +201,9 @@ body {
   background: rgb(19, 20, 20);
   transition: 1s all;
   overflow: auto;
+}
+.popap_settings::-webkit-scrollbar { /* chrome based */
+    width: 0px;  /* ширина scrollbar'a */
 }
 .popap_settings input,
 .popap_settings p {
