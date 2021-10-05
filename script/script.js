@@ -6,56 +6,115 @@ let html = document.querySelector(".user_code_html");
 let css = document.querySelector(".user_code_css");
 let js = document.querySelector(".user_code_js");
 let iframemy = document.querySelector("#ifr");
-// function refresh() {
-//   let htmlvalue = html.value;
-//   let cssvalue = css.value;
-//   let jsvalue = js.value;
-//   let data_body = "html=" + htmlvalue + "css=" + cssvalue + "js=" + jsvalue;
-//
-//   fetch("index.php", {
-//   	method: "POST",
-//     body: data_body,
-//   	headers:{"content-type": "application/x-www-form-urlencoded"}
-//   }).then(
-//     (response) => {
-//       if (response.status !== 200) {
-//   			return Promise.reject();
-//       } else {
-//         iframemy.contentWindow.location.reload(true);
-//       }
-//           //return response.text()
-//   })
-//
-// }
-// html.oninput = function () {
-//   refresh()
-//   console.log("dfghjkl");
-// }
-// css.oninput = function () {
-//   refresh()
-// }
-// js.oninput = function () {
-//   refresh()
-// }
 
 
 
+function refresh() {
+  let htmlvalue = html.value;
+  let cssvalue = css.value;
+  let jsvalue = js.value;
+  let data_body = "html=" + htmlvalue + "css=" + cssvalue + "js=" + jsvalue;
 
+  fetch("index.php", {
+  	method: "POST",
+    body: data_body,
+  	headers:{"content-type": "application/x-www-form-urlencoded"}
+  }).then(
+    (response) => {
+      if (response.status !== 200) {
+  			return Promise.reject();
+      } else {
+        iframemy.contentWindow.location.reload(true);
+      }
+          //return response.text()
+  })
+
+}
+html.oninput = function () {
+  refresh()
+  console.log("dfghjkl");
+}
+css.oninput = function () {
+  refresh()
+}
+js.oninput = function () {
+  refresh()
+}
+function countReplacements(string, search, replacement) {
+  let count = 0;
+  const result = string.replace(search, () => {
+    count++;
+    return replacement;
+  });
+  return { count, result };
+}
+
+let iframex = document.querySelector("#ifr");
+iframex.contentWindow.document.open();
+let js_code = js.value = "<script> let answer = [];</script>";
+iframex.contentWindow.document.write(js_code);
+iframex.contentWindow.document.close();
+js.value = "<script></script>";
 function unification() {
+  let objlog = countReplacements(js.value, /console.log\(/g, "({log:function(l){answer.push(l)}}).log(");
+  let log = objlog.result;
+  let n = objlog.count;
+  log = log.replace("<script>", "<script> answer = [];");
+  let search = "({log:function(l){answer.push(l)}}).log(";
+  let nsearch = search.length;
+  let point = [];
+  // находим начало искомой строки.
+  let i = 0;
+  let j = 0;
+  while (i < n) {
+    let index = log.indexOf(search, j);
+    point.push(index + nsearch);
+    j = index + nsearch;
+    i++
+  }
+  //console.log(point, "log: ", log[point[0] - 1], "-1", "0", log[point[0]], "0", log[point[0] + 1], log[point[0] + 2], log[point[0] + 3]);
+  // находим конец искомой строки.
+  i = 0;
+  j = 0;
+  log = StringToArray(log);
+  while (i < n) {
+    let lastIndex = log.indexOf(log[point[i]], point[i] + 1);
+    // проверка на экронирование.
+  //  console.log(lastIndex, log[point[i]], " log:   ", log[point + 1]);
+  //  console.log(log[lastIndex - 1], log[lastIndex]);
+    log[lastIndex + 1] += ";";
+    //console.log(log);
+    //console.log(log[lastIndex - 1], "000", log[lastIndex]);
+    // if (log[lastIndex] == "\"" || log[lastIndex] == "\'") {
+    //   console.log(log[point[i]]);
+    //   i++
+    //   continue;
+    // }
+    i++
+  }
+  log = arrayToString(log);
+  log = log.replace("</script>", "window.parent.postMessage(answer, '*');</script>");
+  //;window.parent.postMessage(answer, '*');
   let teg = html.value;
   let js_code = js.value
+  js_code = arrayToString(log);
+  //console.log(log);
   function script(h, js) {
     let id = substringSearch(h, "<body>")
     h = h.split("")
     h[id] = js_code + h[id]
     return arrayToString(h)
   }
-  //console.log(js.value.replace(/console.log\(/g, "(function() {let console = {log: function(s) {alert(s)}}console.log("));
   teg = script(teg, js_code);
   let iframex = document.querySelector("#ifr");
   iframex.contentWindow.document.open();
   iframex.contentWindow.document.write(teg);
   iframex.contentWindow.document.close();
+  window.addEventListener("message", function(event) {
+    let log = event.data
+    //console.log(log);
+    document.querySelector(".logs").value = log;
+  });
 }
 
 function addingLi(arr, type) {
@@ -181,7 +240,18 @@ function nSpaceFromBehind(s, p) {
   let status = true;
   let answer = false;
   let i = p;
+  if (
+    (s[i + 1] == "{" && s[i + 2] == "}") ||
+    (s[i + 1] == "[" && s[i + 2] == "]") ||
+    (s[i + 1] == "(" && s[i + 2] == ")") ||
+    (s[i + 1] == '"' && s[i + 2] == '"') ||
+    (s[i + 1] == "'" && s[i + 2] == "'")
+  ) {
+    return answer = false;
+
+  }
   while (i >= 0) {
+
     if (s[i].charCodeAt(0) == 32) {
       console.log("only");
       answer = true;
@@ -199,31 +269,78 @@ function nSpaceFromBehind(s, p) {
   return answer;
 }
 function newlineRuleshtml(e, address) {
-  let res = func(e);
-  if (res == 13) {
-    let start = address.selectionStart;
-    let end = address.selectionEnd;
-    let code = StringToArray(address.value);
-    let tab = nSpaceFromBehind(code, start);
-    console.log(tab, start, code[start - 2], code[start - 1], code[start]);
-    if (tab) {
-      e.preventDefault();
-      let space = 0;
-      let i = start - 1;
-      while (i >= 0) {
-        if (code[i].charCodeAt(0) == 32 && code[i - 1].charCodeAt(0)  == 32) {
-          space += 1;
-        }
-        if (code[i] == "\n") {
-          break
-        }
-        i--
+  let start = address.selectionStart;
+  let end = address.selectionEnd;
+  let code = StringToArray(address.value);
+  function isClose() {
+    let i = start - 1;
+    while (i > 0) {
+      if (code[i] == "/" && code[i - 1] == "<") {
+        return true;
+      } else if (code[i] == "\n") {
+        return false;
       }
-      space = nSpace(space + 2);
-      code[start] = "\n" + space + code[start];
-      address.value = arrayToString(code)
-      address.selectionStart = start + space.length + 1;
-      address.selectionEnd = end + space.length + 1;
+      i--
+    }
+  }
+  function isClose2() {
+    let i = start;
+    while (i < address.value.length) {
+      if (code[i - 1] == "<") {
+        return true;
+      } else if (code[i] == "\n") {
+        return false;
+      }
+      i++
+    }
+    return false
+  }
+  function nTabBefore() {
+    let answer = 0;
+    let i = start - 1;
+    while (i >= 0) {
+      if (code[i] == " " && code[i - 1] == " ") {
+        answer++
+      } else if (code[i] == "\n") {
+        break
+      }
+      i--
+    }
+    return answer + 1;
+  }
+  let res = func(e);
+  if (res == 13 && start == end) {
+    // e.preventDefault();
+    let isCloseLet = isClose();
+    let isCloseLet2 = isClose2();
+    let nTabBeforeLet = nTabBefore();
+    temp = StringToArray(address.value)
+    if (isCloseLet2) {
+      e.preventDefault();
+      if (nTabBeforeLet > 1) {
+        temp[start] = "\n" + nSpace(nTabBeforeLet + 1) + temp[start]
+        address.value = arrayToString(temp);
+        address.selectionStart = start + nTabBeforeLet + 1;
+        address.selectionEnd = end + nTabBeforeLet + 1;
+      } else {
+        temp[start] = "\n" + nSpace(nTabBeforeLet) + temp[start];
+        address.value = arrayToString(temp);
+        address.selectionStart = start + nTabBeforeLet;
+        address.selectionEnd = end + nTabBeforeLet;
+      }
+    }
+    if (isCloseLet) {
+      e.preventDefault();
+      temp[start] = "\n" + nSpace(nTabBeforeLet + 1) + temp[start];
+      address.value = arrayToString(temp);
+      address.selectionStart = start + nTabBeforeLet + 1;
+      address.selectionEnd = end + nTabBeforeLet + 1;
+    } else {
+      e.preventDefault();
+      temp[start] = "\n" + nSpace(nTabBeforeLet + 1) + temp[start];
+      address.value = arrayToString(temp);
+      address.selectionStart = start + nTabBeforeLet + 1;
+      address.selectionEnd = end + nTabBeforeLet + 1;
     }
   }
 }
@@ -235,6 +352,7 @@ function htmlCode() {
   document.querySelector(".user_code_html_n").scroll(0, scroll);
   percent();
   cssCode();
+  localStorage.setItem("html", html.value)
 }
 htmlCode();
 html.oninput = function funhtml() {
@@ -370,52 +488,41 @@ document.addEventListener("selectionchange", function () {
 
 
 function newlineRules(e, address) {
+  let start = address.selectionStart;
+  let end = address.selectionEnd;
   let res = func(e);
-  if (res == 13) {
+  if (res == 13 && start == end) {
     let start = address.selectionStart;
     let end = address.selectionEnd;
     let code = StringToArray(address.value);
-    let status = false;
-    let substatus = 0;
-    let i = start;
-    let tab = nSpaceFromBehind(code, start);
-    while (i >= 0) {
-      if (code[i - 1] == ";") {
-        status = true;
-        substatus = 3;
-        break
+    let res = func(e);
+    function nTabBefore() {
+      let answer = 0;
+      let i = start - 1;
+      while (i >= 0) {
+        if (code[i] == " " && code[i - 1] == " ") {
+          answer++
+        } else if (code[i] == "\n") {
+          break
+        }
+        i--
       }
-      if (code[start - 1] == "{" && nSpacelet == 0) {
-        substatus = 3;
-        status = true;
-        tab = true;
-        break
-      }
-      if (code[start - 1] == "{") {
-        substatus = nSpacelet;
-        status = true;
-        tab = false;
-        break
-      }
-      if (code[i] == " ") {
-        substatus += 1;
-      }
-      if (substatus >= 1 && code[i] != " ") {
-        status = true;
-        break
-      }
-      if (substatus < 1 && code[i] == "\n") {
-        break
-      }
-      i--
+      return answer;
     }
-    if (status && tab) {
-      let space = nSpace(substatus);
+    let nTabBeforeLet = nTabBefore();
+    let status = false;
+    if (code[start - 1] == "{") {
       e.preventDefault();
-      code[start + 1] = space + "\n" + code[start + 1];
+      code[start] = "\n" + nSpace(nTabBeforeLet + 3) + code[start] + "\n";
       address.value = arrayToString(code);
-      address.selectionStart = start + space.length + 1;
-      address.selectionEnd = end + space.length + 1;
+      address.selectionStart = start + 3;
+      address.selectionEnd = end + 3;
+    } else if (code[start - 1] == ";") {
+      e.preventDefault();
+      code[start] = "\n" + nSpace(nTabBeforeLet + 2) + code[start];
+      address.value = arrayToString(code);
+      address.selectionStart = start + 3;
+      address.selectionEnd = end + 3;
     }
   }
 }
@@ -427,7 +534,8 @@ function cssCode() {
   strN(css, ".user_code_css_n")
   let scroll =  css.pageYOffset || css.scrollTop;
   document.querySelector(".user_code_css_n").scroll(0, scroll)
-  percent()
+  percent();
+  localStorage.setItem("css", css.value)
 }
 cssCode()
 css.oninput = function () {
@@ -462,6 +570,7 @@ function jscode() {
   document.querySelector(".user_code_js_n").scroll(0, scroll);
   percent();
   cssCode();
+  localStorage.setItem("js", js.value)
 }
 strN(js, ".user_code_js_n");
 js.oninput = function () {
