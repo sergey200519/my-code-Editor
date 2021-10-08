@@ -9,37 +9,37 @@ let iframemy = document.querySelector("#ifr");
 
 
 
-function refresh() {
-  let htmlvalue = html.value;
-  let cssvalue = css.value;
-  let jsvalue = js.value;
-  let data_body = "html=" + htmlvalue + "css=" + cssvalue + "js=" + jsvalue;
+// function refresh() {
+//   let htmlvalue = html.value;
+//   let cssvalue = css.value;
+//   let jsvalue = js.value;
+//   let data_body = "html=" + htmlvalue + "css=" + cssvalue + "js=" + jsvalue;
 
-  fetch("index.php", {
-  	method: "POST",
-    body: data_body,
-  	headers:{"content-type": "application/x-www-form-urlencoded"}
-  }).then(
-    (response) => {
-      if (response.status !== 200) {
-  			return Promise.reject();
-      } else {
-        iframemy.contentWindow.location.reload(true);
-      }
-          //return response.text()
-  })
+//   fetch("index.php", {
+//   	method: "POST",
+//     body: data_body,
+//   	headers:{"content-type": "application/x-www-form-urlencoded"}
+//   }).then(
+//     (response) => {
+//       if (response.status !== 200) {
+//   			return Promise.reject();
+//       } else {
+//         iframemy.contentWindow.location.reload(true);
+//       }
+//           //return response.text()
+//   })
 
-}
-html.oninput = function () {
-  refresh()
-  console.log("dfghjkl");
-}
-css.oninput = function () {
-  refresh()
-}
-js.oninput = function () {
-  refresh()
-}
+// }
+// html.oninput = function () {
+//   refresh()
+//   console.log("dfghjkl");
+// }
+// css.oninput = function () {
+//   refresh()
+// }
+// js.oninput = function () {
+//   refresh()
+// }
 function countReplacements(string, search, replacement) {
   let count = 0;
   const result = string.replace(search, () => {
