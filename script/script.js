@@ -8,13 +8,29 @@ let js = document.querySelector(".user_code_js");
 let iframemy = document.querySelector("#ifr");
 
 
-
+if (localStorage.getItem("html") == null) {
+  localStorage.setItem("html", html.value)
+} else {
+  html.value = localStorage.getItem("html")
+}
+if (localStorage.getItem("css") == null) {
+  localStorage.setItem("css", css.value)
+} else {
+  css.value = localStorage.getItem("css")
+}
+if (localStorage.getItem("js") == null) {
+  console.log("null");
+  localStorage.setItem("js", js.value)
+} else {
+  console.log("yes", "-", localStorage.getItem("js"));
+  js.value = localStorage.getItem("js")
+}
 // function refresh() {
 //   let htmlvalue = html.value;
 //   let cssvalue = css.value;
 //   let jsvalue = js.value;
 //   let data_body = "html=" + htmlvalue + "css=" + cssvalue + "js=" + jsvalue;
-
+//
 //   fetch("index.php", {
 //   	method: "POST",
 //     body: data_body,
@@ -28,7 +44,7 @@ let iframemy = document.querySelector("#ifr");
 //       }
 //           //return response.text()
 //   })
-
+//
 // }
 // html.oninput = function () {
 //   refresh()
@@ -682,31 +698,50 @@ document.querySelector(".width_preview_in_html").addEventListener("change", e =>
 });
 
 //-----------------------------------------------------------------------------------
+console.log(document.querySelector(".popap_settings").offsetWidth);
 document.documentElement.style.setProperty("--pos_settings", "-" + document.querySelector(".popap_settings").offsetWidth + "px");
+function zero_pos() {
+  document.documentElement.style.setProperty("--pos_settings", "-" + document.querySelector(".popap_settings").offsetWidth + "px");
+  console.log("yes");
+  return document.querySelector(".popap_settings").offsetWidth
+}
+setTimeout(zero_pos, 0);
 let oldPos = false;
 document.querySelector(".on-off").addEventListener('click', function() {
   setting(false)
   funWidth_preview()
 });
-let widthOnOff = document.querySelector(".popap_settings").offsetWidth - 25;
+let widthOnOff = document.querySelector(".popap_settings").offsetWidth;
+function resetWidth() {
+  widthOnOff = document.querySelector(".popap_settings").offsetWidth;
+}
 function setting(earlyExit) {
   if (earlyExit) {
+    resetWidth()
+    console.log("dfghu");
     document.documentElement.style.setProperty("--left-pos_on-off", widthOnOff + "px");
     return "";
   }
   if (oldPos) {
     document.documentElement.style.setProperty("--type-pos_settings", "fixed");
-    document.documentElement.style.setProperty("--pos_settings", "-" + (widthOnOff + 25) + "px");
+    resetWidth()
+    resetWidth()
+    document.documentElement.style.setProperty("--pos_settings", "-" + (screen.width - widthOnOff) + "px");
     document.documentElement.style.setProperty("--left-pos_on-off", "-25px");
     document.documentElement.style.setProperty("--cursor-on_off", "e-resize")
-    console.log("on");
+    console.log("on", widthOnOff);
     oldPos = false;
   }else {
     document.documentElement.style.setProperty("--type-pos_settings", "inherit");
     document.documentElement.style.setProperty("--pos_settings", "0");
     oldPos = true;
-    //console.log(widthOnOff);
-    document.documentElement.style.setProperty("--left-pos_on-off", (widthOnOff + 0) + "px");
+    resetWidth();
+    console.log(widthOnOff, "выход");
+     function posOn() {
+
+      document.documentElement.style.setProperty("--left-pos_on-off", document.querySelector(".popap_settings").offsetWidth - 25 + "px");
+    }
+    setTimeout(posOn(), 1000)
     document.documentElement.style.setProperty("--cursor-on_off", "w-resize")
 
   }
