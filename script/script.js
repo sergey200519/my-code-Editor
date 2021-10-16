@@ -332,6 +332,7 @@ function newlineRuleshtml(e, address) {
     let nTabBeforeLet = nTabBefore();
     temp = StringToArray(address.value)
     if (isCloseLet2) {
+      console.log("if1");
       e.preventDefault();
       if (nTabBeforeLet > 1) {
         temp[start] = "\n" + nSpace(nTabBeforeLet + 1) + temp[start]
@@ -339,6 +340,7 @@ function newlineRuleshtml(e, address) {
         address.selectionStart = start + nTabBeforeLet + 1;
         address.selectionEnd = end + nTabBeforeLet + 1;
       } else {
+        console.log("else1");
         temp[start] = "\n" + nSpace(nTabBeforeLet) + temp[start];
         address.value = arrayToString(temp);
         address.selectionStart = start + nTabBeforeLet;
@@ -346,14 +348,20 @@ function newlineRuleshtml(e, address) {
       }
     }
     if (isCloseLet) {
+      console.log("if1");
       e.preventDefault();
-      temp[start] = "\n" + nSpace(nTabBeforeLet + 1) + temp[start];
+      // temp[start] = "\n" + nSpace(nTabBeforeLet + 1) + temp[start];
       address.value = arrayToString(temp);
       address.selectionStart = start + nTabBeforeLet + 1;
       address.selectionEnd = end + nTabBeforeLet + 1;
     } else {
+      console.log("else2");
       e.preventDefault();
-      temp[start] = "\n" + nSpace(nTabBeforeLet + 1) + temp[start];
+      if (temp[start] == undefined) {
+        temp[start] = "\n" + nSpace(nTabBeforeLet + 1);
+      } else {
+        temp[start] = "\n" + nSpace(nTabBeforeLet + 1) + temp[start];
+      }
       address.value = arrayToString(temp);
       address.selectionStart = start + nTabBeforeLet + 1;
       address.selectionEnd = end + nTabBeforeLet + 1;
@@ -648,11 +656,12 @@ window.onresize = function(event) {
   if (document.body.offsetWidth < 450) {
     alert("Ширина браузера слишком мала для коимфортной работы.");
   }
-  let widthOnOff = document.querySelector(".popap_settings").offsetWidth - 25;
-  document.documentElement.style.setProperty("--type-pos_settings", "fixed");
-  document.documentElement.style.setProperty("--pos_settings", "-" + (widthOnOff + 25) + "px");
-  document.documentElement.style.setProperty("--left-pos_on-off", "-25px");
-  document.documentElement.style.setProperty("--cursor-on_off", "e-resize")
+  settingPosition()
+  // let widthOnOff = document.querySelector(".popap_settings").offsetWidth - 25;
+  // document.documentElement.style.setProperty("--type-pos_settings", "fixed");
+  // document.documentElement.style.setProperty("--pos_settings", "-" + (widthOnOff + 25) + "px");
+  // document.documentElement.style.setProperty("--left-pos_on-off", "-25px");
+  // document.documentElement.style.setProperty("--cursor-on_off", "e-resize")
 };
 
 
@@ -698,54 +707,56 @@ document.querySelector(".width_preview_in_html").addEventListener("change", e =>
 });
 
 //-----------------------------------------------------------------------------------
-console.log(document.querySelector(".popap_settings").offsetWidth);
-document.documentElement.style.setProperty("--pos_settings", "-" + document.querySelector(".popap_settings").offsetWidth + "px");
-function zero_pos() {
-  document.documentElement.style.setProperty("--pos_settings", "-" + document.querySelector(".popap_settings").offsetWidth + "px");
-  console.log("yes");
-  return document.querySelector(".popap_settings").offsetWidth
+
+function settingPosition() {
+  let windowWidth = window.innerWidth;
+  let windowHeight = window.innerHeight;
+  document.documentElement.style.setProperty("--width_setting", (windowWidth / 100 * 80) + "px");
+  document.documentElement.style.setProperty("--left_pos_setting", (windowWidth / 100 * 10) + "px");
+  document.documentElement.style.setProperty("--height_setting", (windowHeight / 100 * 90) + "px");
+  document.documentElement.style.setProperty("--top_pos_setting", (windowHeight / 100 * 5) + "px");
+  document.documentElement.style.setProperty("--top-pos_on-off", (windowHeight / 2 - 45) + "px");
+  console.log(windowWidth);
+
+
 }
-setTimeout(zero_pos, 0);
-let oldPos = false;
+settingPosition()
+
 document.querySelector(".on-off").addEventListener('click', function() {
-  setting(false)
-  funWidth_preview()
+  setting()
 });
-let widthOnOff = document.querySelector(".popap_settings").offsetWidth;
-function resetWidth() {
-  widthOnOff = document.querySelector(".popap_settings").offsetWidth;
-}
+
+let oldPos = false;
 function setting(earlyExit) {
-  if (earlyExit) {
-    resetWidth()
-    console.log("dfghu");
-    document.documentElement.style.setProperty("--left-pos_on-off", widthOnOff + "px");
-    return "";
-  }
+  let el = document.querySelector(".settings")
   if (oldPos) {
-    document.documentElement.style.setProperty("--type-pos_settings", "fixed");
-    resetWidth()
-    resetWidth()
-    document.documentElement.style.setProperty("--pos_settings", "-" + (screen.width - widthOnOff) + "px");
-    document.documentElement.style.setProperty("--left-pos_on-off", "-25px");
-    document.documentElement.style.setProperty("--cursor-on_off", "e-resize")
-    console.log("on", widthOnOff);
+    el.classList.remove("none");
     oldPos = false;
   }else {
-    document.documentElement.style.setProperty("--type-pos_settings", "inherit");
-    document.documentElement.style.setProperty("--pos_settings", "0");
+    el.classList.add("none");
     oldPos = true;
-    resetWidth();
-    console.log(widthOnOff, "выход");
-     function posOn() {
-
-      document.documentElement.style.setProperty("--left-pos_on-off", document.querySelector(".popap_settings").offsetWidth - 25 + "px");
-    }
-    setTimeout(posOn(), 1000)
-    document.documentElement.style.setProperty("--cursor-on_off", "w-resize")
-
   }
 }
+setting()
+
+// console.log(document.querySelector(".popap_settings").offsetWidth);
+// document.documentElement.style.setProperty("--pos_settings", "-" + document.querySelector(".popap_settings").offsetWidth + "px");
+// function zero_pos() {
+//   document.documentElement.style.setProperty("--pos_settings", "-" + document.querySelector(".popap_settings").offsetWidth + "px");
+//   console.log("yes");
+//   return document.querySelector(".popap_settings").offsetWidth
+// }
+// setTimeout(zero_pos, 0);
+// let oldPos = false;
+// document.querySelector(".on-off").addEventListener('click', function() {
+//   setting(false)
+//   funWidth_preview()
+// });
+// let widthOnOff = document.querySelector(".popap_settings").offsetWidth;
+// function resetWidth() {
+//   widthOnOff = document.querySelector(".popap_settings").offsetWidth;
+// }
+
 
 let codeN = 0;
 function heightCode(n) {
