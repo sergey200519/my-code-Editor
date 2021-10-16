@@ -16,14 +16,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital@1&display=swap" rel="stylesheet">
   </head>
   <body>
+    <div class="on-off"></div>
     <!-- <iframe id="5afb55c9-e388-48a4-8feb-e479e7bc9a52" src="https://www.vectary.com/viewer/v1/?model=5afb55c9-e388-48a4-8feb-e479e7bc9a52&env=kiara9dusk" frameborder="0" width="100%" height="480"></iframe> -->
     <section class="settings">
-      <div class="on-off"></div>
       <div class="popap_settings">
         <h1>Редактор кода</h1>
         <p>Это редакто для html, css, js и <br> для работы с vue и react.</p>
         <h2>Настройки</h2>
-        <label class="settings"><input class="font-size_input" type="number" value="16"><p>размер шрифта</p><br>
+        <label class="settings_input"><input class="font-size_input" type="number" value="16"><p>размер шрифта</p><br>
         <input type="number" class="width_preview_in_html" placeholder="ширина сайта"><p>ширина экрана</p><br><p>(это без учёта границ <br> которые равны 2px)</p> </label>
         <div class="answer_code"><p class="answer_code_in_html" wrap="hard"></p><br><button class="btn">Получить скомпелированый код</button></div>
         <div class="tabs">
@@ -98,7 +98,7 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h1>Добро пожаловать</h1>
+    <h1 class="f">Добро пожаловать</h1>
   </body>
 </html>
           </textarea>
@@ -120,13 +120,18 @@ h1 {
           <textarea class="user_code_js_n">123</textarea>
           <textarea class="user_code_js">
 <script>
-
+  console.log("klkjhjkkjl")
+  let test = "test"
+  let test2 = 'test2'
+  console.log('klkjhjkkjl')
+  console.log("klkjhjkkjl")
 </script>
           </textarea>
         </div>
       </div>
       <div class="right_side_of_code">
         <iframe width="" height="" class="right_side_of_code_inner" id="ifr"></iframe>
+        <textarea class="logs"></textarea>
       </div>
     </section>
     <div class="popap"><p class="popap_p"></p></div>
