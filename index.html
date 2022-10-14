@@ -5,6 +5,7 @@
     <title>Редактор кода</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/style.css" class="style_min">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="img/logo.png">
@@ -16,11 +17,102 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital@1&display=swap" rel="stylesheet">
   </head>
   <body>
-    <section class="settings">
+    <section class="popap">
+      <p class="popap_text"></p>
     </section>
-    <section class="box_code">
+    <section class="settings none">
+      <h1 class="settings_item">Это редакто для html, css, js.</h1>
+      <div class="tabs settings_item">
+        <div class="tabs_item tabs_html"><p class="tabs_item-item tabs_html_p cross">HTML</p><div class="html-percent tabs_item-item"></div></div>
+        <div class="tabs_item tabs_css"><p class="tabs_item-item tabs_css_p cross">CSS</p><div class="css-percent tabs_item-item"></div></div>
+        <div class="tabs_item tabs_js"><p class="tabs_item-item tabs_js_p cross">JS</p><div class="tabs_item-item js-percent"></div></div>
+      </div>
+      <h2>Настройки</h2>
+      <div class="settings_item">
+        <input type="number" class="width_preview_in_html" placeholder="ширина сайта"><p>ширина экрана</p>
+      </div>
+      <div class="copy_code">
+        <button class="copy_button">Скопировать весь код</button>
+      </div>
+      <h2>Поиск снипетов</h2>
+      <div class="html_snippets snippets_box">
+        <input class="html_snippets_input" type="text" placeholder="Поиск html снипетов">
+        <div>
+          <ul class="snippets_ul html_snippets_ul">
+
+          </ul>
+        </div>
+      </div>
+      <div class="css_snippets snippets_box">
+        <input class="css_snippets_input" type="text" placeholder="Поиск css снипетов">
+        <div>
+          <ul class="snippets_ul css_snippets_ul">
+
+          </ul>
+        </div>
+      </div>
+      <div class="js_snippets snippets_box">
+        <input class="js_snippets_input" type="text" placeholder="Поиск js снипетов">
+        <div>
+          <ul class="snippets_ul js_snippets_ul">
+
+          </ul>
+        </div>
+      </div>
+      <div class="new_snippets">
+        <h2>Сделать свой снипет</h2>
+        <p>Надо писать по образцу: в первое поле пишите ключевое слово а во второе код.</p>
+        <div class="new_snippets_html"><input class="new_snippets new_snippets_html_input"><input class="new_snippets_html_input2"><button class="new_snippets_html_button">Сделать html снипет</button></div>
+        <div class="new_snippets_css"><input class="new_snippets new_snippets_css_input"><input class="new_snippets_css_input2"><button class="new_snippets_css_button">Сделать css снипет</button></div>
+        <div class="new_snippets_js"><input class="new_snippets new_snippets_js_input"><input class="new_snippets_js_input2"><button class="new_snippets_js_button">Сделать js снипет</button></div>
+      </div>
     </section>
-    <script src="script/snippets.js"></script>
-    <script src="script/script.js"></script>
+    <header>
+      <h1>Редактор кода</h1>
+      <button class="update">Запустить код</button>
+      <img src="img/settings.png" class="on_off">
+    </header>
+    <section class="code_box">
+      <div class="code_part">
+        <div class="user_code_box user_code_box-html">
+          <div class="user_code_on_of user_code_on_of-html">&#215;</div>
+          <textarea class="user_code_n user_code_n-html" disabled></textarea>
+          <textarea class="user_code user_code-html">
+<h1 class="f">Добро пожаловать</h1>
+</textarea>
+        </div>
+        <div class="user_code_box user_code_box-css">
+          <div class="user_code_on_of user_code_on_of-css">&#215;</div>
+          <textarea class="user_code_n user_code_n-css" disabled></textarea>
+          <textarea class="user_code user_code-css">
+<style>
+  h1 {
+    font-size: 30px;
+    text-align: center;
+  }
+</style>
+          </textarea>
+        </div>
+        <div class="user_code_box user_code_box-js">
+          <div class="user_code_on_of user_code_on_of-js">&#215;</div>
+          <textarea class="user_code_n user_code_n-js" disabled></textarea>
+          <textarea class="user_code user_code-js">
+let a = "Hello wrold";
+let user = "Sergey";
+console.log(a);
+console.log(`Welcome ${user}`)
+          </textarea>
+        </div>
+      </div>
+      <div class="view">
+        <iframe class="screen"></iframe>
+        <textarea class="logs"></textarea>
+      </div>
+    </section>
+    <!-- <script type="module" src="script/snippets.js"></script>
+    <script type="module" src="script/modules/functions.js"></script>
+    <script type="module" src="script/modules/iframe.js"></script>
+    <script type="module" src="script/modules/userCode.js"></script> -->
+    <script type="module" src="script/script.js"></script>
   </body>
 </html>

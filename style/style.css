@@ -1,6 +1,12 @@
 :root {
   --font-size: 16px;
   --line_h: 18px;
+  --width_user_code_box: 31%;
+  --cross: "\00D7";
+  --plus: "+";
+  --width_screen: 49%;
+  --width_code_box: 49%;
+  --popap_top: -115px;
 }
 a {
   color: inherit;
@@ -13,6 +19,10 @@ body {
   padding: 0;
   font-size: var(--font-size);
   font-family: 'Roboto', sans-serif;
+  transition: 0.8s;
+}
+body {
+  height: 100vh;
 }
 h1 {
   font-size: 2.5rem;
@@ -26,13 +36,17 @@ input, textarea, button {
   font-size: var(--font-size);
   line-height: var(--line_n);
 }
+input {
+  padding: 5px 5px;
+  border-radius: 5px;
+}
 textarea {
   font-family: 'Roboto Mono', monospace;
   padding: 10px;
   resize: none;
 }
 .none {
-  display: none;
+  display: none !important;
 }
 button {
   padding: 10px 20px;
@@ -41,6 +55,7 @@ button {
   background: #e1e1e1;
   box-shadow: 1px 1px 5px;
   color: #4d4d4d;
+  cursor: pointer;
 }
 button:focus, button:hover {
   background: #fff;
@@ -49,4 +64,212 @@ button:focus, button:hover {
 }
 
 
+/* settings */
+
+
+.settings {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  z-index: 2;
+  width: 80%;
+  height: 80%;
+  background: rgb(19, 20, 20);
+  color: white;
+  padding: 20px 10px;
+  text-align: center;
+  border-radius: 20px;
+  overflow: auto;
+}
+.settings::-webkit-scrollbar {
+  width: 0;
+}
+.cross::after {
+  cursor: pointer;
+  margin-left: 10px;
+  content: var(--cross);
+}
+.plus::after {
+  display: inline;
+  cursor: pointer;
+  margin-left: 10px;
+  content: var(--plus);
+}
+.settings_item {
+  margin-bottom: 40px;
+}
+.tabs_item-item {
+  display: inline-block;
+  padding: 5px 10px;
+}
+.snippets_box {
+  margin-bottom: 30px;
+}
+.snippets_ul {
+  margin-top: 15px;
+  max-height: 250px;
+  overflow: auto;
+}
+.new_snippets {
+  margin-right: 15px;
+}
+
+
+/* headers */
+
+
+header {
+  padding: 15px;
+  width: 100%;
+  height: 80px;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  justify-content: space-between;
+}
+header img {
+  height: 50px;
+}
+header img:hover {
+  cursor: pointer;
+}
+.update {
+  margin: 0;
+  position: absolute;
+  top: 20px;
+  right: 80px;
+}
+
+
+/* code box */
+
+
+.code_box {
+  margin: 0;
+  width: 100%;
+  height: calc(100% - 85px);
+  padding: 15px;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  justify-content: space-between;
+}
+.code_part, .view {
+  height: 100%;
+}
+.code_part {
+  width: var(--width_code_box);
+}
+.view {
+  width: var(--width_screen);
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.logs {
+  height: 18%;
+  width: 100%;
+}
+.code_part {
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.code_part .user_code_box {
+  height: var(--width_user_code_box);
+  width: 100%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  justify-content: space-between;
+}
+.user_code_box {
+  position: relative;
+}
+.user_code {
+  white-space: pre;
+  overflow-wrap: normal;
+  width: 85%;
+}
+.user_code_n {
+  overflow-y: hidden;
+  width: 15%;
+  border: 0;
+  text-align: right;
+}
+.user_code_on_of {
+  font-size: 30px;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+.screen {
+  padding: 0;
+  margin-bottom: 15px;
+  width: 100%;
+  height: 80%;
+  border: 1px solid black;
+}
+
+
+.code_box_min {
+  margin: 0;
+  width: 100%;
+  height: calc(100% - 85px);
+  padding: 15px;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  justify-content: space-between;
+  -webkit-flex-direction: column-reverse;
+  -ms-flex-direction: column-reverse;
+  flex-direction: column-reverse;
+}
+.user_code_box_min {
+  height: var(--width_user_code_box);
+  width: 100%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.code_part_min {
+  height: 50%;
+}
+.view_min {
+  height: 48%;
+}
+.user_code_min {
+  width: 95%;
+}
+.user_code_n_min {
+  overflow-y: hidden;
+  width: 5%;
+  min-width: 80px;
+  border: 0;
+  text-align: right;
+}
+
+
+.popap {
+  z-index: 3;
+  width: 80%;
+  position: absolute;
+  top: var(--popap_top);
+  left: 10%;
+  padding: 15px;
+  background: #78ff00;
+  border-radius: 15px;
+}
+.popap_text {
+  text-align: center;
+}
 /* '-' */
