@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------------------------------
-let htmlSnippets = [
+let htmlSnipets = [
   ["h1", "<h1></h1>"],
   ["h2", "<h2></h2>"],
   ["h3", "<h3></h3>"],
@@ -7,6 +7,8 @@ let htmlSnippets = [
   ["div", "<div></div>"],
   [".", "<div></div>"],
   ["a", '<a href=""></a>'],
+  ["p", "<p></p>"],
+  ["pre", "<pre></pre>"],
   // pars
   ['a:link', '<a href="http://"></a>'],
   ['a:mail', '<a href="mailto:"></a>'],
@@ -55,6 +57,7 @@ let htmlSnippets = [
   ['btn:b', '<button type="button"></button>'],
   ['btn:r', '<button type="reset"></button>'],
   ['sect', '<section></section>'],
+  ["section", "<section></section>"],
   ['art', '<article></article>'],
   ['hdr', '<header></header>'],
   ['ftr', '<footer></footer>'],
@@ -71,7 +74,7 @@ let htmlSnippets = [
   ['cc:noie', '<!--[if !IE]><!--> <!--<![endif]-->']
 ];
 //-------------------------------------------------------------------------------------------
-let cssSnippets = [
+let cssSnipets = [
   ["m", "margin:"],
   ["p", "padding:"],
   ["media", `@media {
@@ -268,7 +271,7 @@ let cssSnippets = [
   ['us', '-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;']
 ];
 //-------------------------------------------------------------------------------------------
-let jsSnippets = [
+let jsSnipets = [
   ["cl", "console.log();"],
   ["l", "let"],
   ["c", "const"],
@@ -278,3 +281,6 @@ let jsSnippets = [
   ["cca", "charCodeAt()"]
 ];
 //-------------------------------------------------------------------------------------------
+
+
+export {htmlSnipets, cssSnipets, jsSnipets}
