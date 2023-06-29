@@ -20,31 +20,29 @@ class HtmlFormat extends Format {
         this.textarea.selectionStart = start - word.length + (snipet.length / 2)
         this.textarea.selectionEnd = end - word.length + (snipet.length / 2)
       }
+    } else {
+      this.tabs()
     }
   }
+
   enter() {
-    console.log("Enter");
     let start = this.textarea.selectionStart
     let end = this.textarea.selectionEnd
-    if (start == end) {
-      let firstCode = this.textarea.value
-      let n = this.nSpaseBeforeRow(firstCode, start - 1)
-      let arr = fromStrToArray(firstCode)
-      if (this.isBetweenTeg(firstCode, start - 1)) {
-        arr[start - 1] += `\n  ${this.createSpase(n)}\n${this.createSpase(n)}`
-        this.textarea.value = fromArrayToStr(arr)
-        iframeClass.update(fromArrayToStr(arr))
-        this.textarea.selectionStart = start + n + 3
-        this.textarea.selectionEnd = end + n + 3
-      } else {
-        arr[start - 1] += `\n${this.createSpase(n)}`
-        this.textarea.value = fromArrayToStr(arr)
-        iframeClass.update(fromArrayToStr(arr))
-        this.textarea.selectionStart = start + n + 1
-        this.textarea.selectionEnd = end + n + 1
-      }
+    let firstCode = this.textarea.value
+    let n = this.nSpaseBeforeRow(firstCode, start - 1)
+    let arr = fromStrToArray(firstCode)
+    if (this.isBetweenTeg(firstCode, start - 1)) {
+      arr[start - 1] += `\n  ${this.createSpase(n)}\n${this.createSpase(n)}`
+      this.textarea.value = fromArrayToStr(arr)
+      iframeClass.update(fromArrayToStr(arr))
+      this.textarea.selectionStart = start + n + 3
+      this.textarea.selectionEnd = end + n + 3
     } else {
-      console.log("TODO");
+      arr[start - 1] += `\n${this.createSpase(n)}`
+      this.textarea.value = fromArrayToStr(arr)
+      iframeClass.update(fromArrayToStr(arr))
+      this.textarea.selectionStart = start + n + 1
+      this.textarea.selectionEnd = end + n + 1
     }
   }
 }

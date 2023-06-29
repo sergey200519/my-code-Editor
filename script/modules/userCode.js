@@ -139,7 +139,6 @@ function newUserCodeBox(userCodeBox, typeCode) {
     } else if (e.inputType == "deleteContentBackward") {
       box.inputText(box.userCodeText.value, "delete")
     } else {
-      console.log(e.inputType);
       box.inputText(box.userCodeText.value)
     }
   }

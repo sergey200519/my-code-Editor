@@ -62,6 +62,11 @@ class IFrame {
     } else if (js != null) {
       this.jsCode = js
     }
+
+    localStorage.setItem("html", this.htmlCode)
+    localStorage.setItem("css", this.cssCode)
+    localStorage.setItem("js", this.jsCode)
+
     this.mergeCode()
   }
 

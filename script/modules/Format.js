@@ -43,17 +43,20 @@ class Format {
     return false
   }
 
+  isBetweenStaples(text, position) {
+    if (text[position] == "{" && text[position + 1] == "}") return true
+    return false
+  }
+
   tabs() {
     let start = this.textarea.selectionStart
     let end = this.textarea.selectionEnd
-    if (start == end) {
-      let arr = fromStrToArray(this.textarea.value)
-      arr[start - 1] += "  "
-      let codeStr = fromArrayToStr(arr)
-      this.textarea.value = codeStr
-      this.textarea.selectionStart = start + 2
-      this.textarea.selectionEnd = end + 2
-    }
+    let arr = fromStrToArray(this.textarea.value)
+    arr[start - 1] += "  "
+    let codeStr = fromArrayToStr(arr)
+    this.textarea.value = codeStr
+    this.textarea.selectionStart = start + 2
+    this.textarea.selectionEnd = end + 2
   }
 
   snippets() {

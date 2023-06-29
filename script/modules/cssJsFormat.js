@@ -2,7 +2,7 @@ import {fromStrToArray, fromArrayToStr, findSnipets,
 replaceForSnipets, wordBackForJsAndCss} from "./functions.js"
 import {Format} from "./Format.js"
 import {iframeClass} from "./userCode.js"
-import {htmlUserCodeBox} from  "./../script.js"
+import {cssUserCodeBox, jsUserCodeBox} from  "./../script.js"
 
 class CssAndJs extends Format {
   snippets() {
@@ -21,6 +21,28 @@ class CssAndJs extends Format {
       }
     }
   }
+
+  enter() {
+    console.log("Enter");
+    let start = this.textarea.selectionStart
+    let end = this.textarea.selectionEnd
+    let firstCode = this.textarea.value
+    let n = this.nSpaseBeforeRow(firstCode, start - 1)
+    let arr = fromStrToArray(firstCode)
+    if (this.isBetweenStaples(firstCode, start - 1)) {
+      arr[start - 1] += `\n  ${this.createSpase(n)}\n${this.createSpase(n)}`
+      this.textarea.value = fromArrayToStr(arr)
+      iframeClass.update(fromArrayToStr(arr))
+      this.textarea.selectionStart = start + n + 3
+      this.textarea.selectionEnd = end + n + 3
+    } else {
+      arr[start - 1] += `\n${this.createSpase(n)}`
+      this.textarea.value = fromArrayToStr(arr)
+      iframeClass.update(fromArrayToStr(arr))
+      this.textarea.selectionStart = start + n + 1
+      this.textarea.selectionEnd = end + n + 1
+    }
+  }
 }
 
 class CssFormat extends CssAndJs {}
@@ -36,6 +58,11 @@ function newCssFormat(snipets) {
       event.preventDefault()
       cssFormat.snippets()
     }
+    if (event.key == "Enter") {
+      event.preventDefault()
+      cssFormat.enter()
+    }
+    cssUserCodeBox.update()
   })
 }
 
@@ -47,6 +74,11 @@ function newJsFormat(snipets) {
       event.preventDefault()
       jsFormat.snippets()
     }
+    if (event.key == "Enter") {
+      event.preventDefault()
+      jsFormat.enter()
+    }
+    jsUserCodeBox.update()
   })
 }
 
