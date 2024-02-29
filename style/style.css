@@ -20,6 +20,7 @@ body {
   font-size: var(--font-size);
   font-family: 'Roboto', sans-serif;
   transition: 0.8s;
+  font-weight: 400;
 }
 body {
   height: 100vh;
