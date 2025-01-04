@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ES6", // Целевой стандарт
+        "module": "ES6",
+        "strict": true,
+        "esModuleInterop": true,
+        "outDir": "./dist", // Папка для выходных файлов
+        "rootDir": "./src", // Исходная папка
+        "moduleResolution": "node"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
