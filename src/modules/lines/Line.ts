@@ -1,4 +1,5 @@
-import { UserCodeEditorContext } from "../types/types";
+import { Keyboard } from "../keyboard/Keyboard";
+import { KeyboardInputResult, UserCodeEditorContext } from "../types/types";
 
 export class BaseLine {
     private userCodeBox: HTMLElement;
@@ -7,9 +8,10 @@ export class BaseLine {
     private cursor: any;
     private keyboard: any;
     protected row: HTMLElement | undefined;
-    private rowText: string;
-    private rowCursorPosition: number;
+    rowText: string;
+    rowCursorPosition: number;
     protected view: any;
+    private shiftAdd: number;
 
     
     constructor(userCodeBox: HTMLElement, context: UserCodeEditorContext) {
@@ -17,22 +19,30 @@ export class BaseLine {
         this.context = context;
         this.settings = this.context.settings;
         this.cursor = this.context.cursor;
-        this.keyboard = this.context.keyboard;
 
         this.row;
         this.rowText = "";
         this.rowCursorPosition = 0;
 
         this.view;
+
+        this.shiftAdd = 0;
+
+
         this.initRow();
-        this.view.viewCode("<h1 class=\"title\" dragable id=\"ind\">hi</h1><p class=\"text\" id=\"sdfrty\">par pu</p> <p>hi hi</p> <p drag>par    pu</p>");
+        // this.view.viewCode("<h1 class=\"title\" dragable id=\"ind\">hi</h1><p class=\"text\" id=\"sdfrty\">par pu</p> <p>hi hi</p> <p drag>par    pu</p>");
         // this.view.viewCode("<g");
+    }
+
+    putCursor() {
+        this.cursor.putCursor(this.rowCursorPosition + this.shiftAdd + 1, this);
+        this.rowCursorPosition += this.shiftAdd;
     }
 
     initRow() {
         this.row = document.createElement("div");
-        this.row.className = this.settings.rowClass
-        this.row.setAttribute("tabindex", "0")
+        this.row.className = this.settings.rowClass;
+        this.row.setAttribute("tabindex", "0");
         this.userCodeBox.appendChild(this.row);
 
         this.row.addEventListener("focus", (event: FocusEvent) => {
@@ -47,17 +57,21 @@ export class BaseLine {
         })
 
         this.row.addEventListener("click", (event: MouseEvent) => {
-            this.cursor.putCursor(event, this)
+            this.cursor.initPutCursor(event, this);
+            this.rowCursorPosition = this.cursor.positionN;
         })
 
         this.row.addEventListener("keydown", (event: KeyboardEvent) => {
-            const data = this.keyboard.input(event);
-            if (data.simpleCharacter) this.rowText += data.text;
-            else {
-                
+            const data: KeyboardInputResult = Keyboard.input(event);
+            if (data.simpleCharacter) {
+                this.rowText += data.text;
+                this.shiftAdd = 1;
+            } else {
+                console.log("else");
             }
-            if (this.row && this.view) {
+            if (this.row && this.view) { 
                 this.row.innerHTML = this.view.viewCode(this.rowText);
+                this.putCursor()
             }
         })
     }

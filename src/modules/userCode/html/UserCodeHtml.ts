@@ -8,6 +8,7 @@ export class UserCodeHtml extends UserCode {
         console.log("html");
         
         this.createNewRow();
+        this.createNewRow();
     }
     createNewRow() {
         const line = new LineHtml(this.userCodeBox, this.context);
