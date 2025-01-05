@@ -4,6 +4,9 @@ import { Settings } from "../settings/Settings";
 import { UserCodeEditorContext } from "../types/types";
 
 export class LineHtml extends BaseLine {
+    viewCode(code: string): string {
+        return this.view.render(code);
+    }
     constructor(userCodeBox: HTMLElement, context: UserCodeEditorContext) {
         super(userCodeBox, context);
     }

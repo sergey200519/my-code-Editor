@@ -5,7 +5,6 @@ interface ILine {
     rowText: string;
 }
 
-// TODO: Write interface
 interface ICursor {
     cursor: HTMLElement;
     line: ILine;
