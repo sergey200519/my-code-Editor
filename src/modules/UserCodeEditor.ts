@@ -18,7 +18,7 @@ export class UserCodeEditor {
         this.userCodeBox = userCodeBox;
         this.settings = settings;
 
-        this.cursor = new Cursor(this.settings);
+        this.cursor = new Cursor();
         this.keyboard = new Keyboard(this.settings);
 
         this.context = {
