@@ -1,0 +1,10 @@
+@use "./lines";
+
+@use "./html/code_style_html";
+
+.user_code span {
+    display: inline-block;
+}
+.user_code-row {
+    display: flex;
+}

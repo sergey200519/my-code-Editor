@@ -1,0 +1,25 @@
+.user_code-row {
+    position: relative;
+    height: var(--line_height);
+    min-width: 100%;
+    overflow: hidden; 
+
+    /* background-color: red;
+    opacity: 0.3; */
+}
+.user_code-row-focused {
+    background-color: gray;
+    outline: 0;
+}
+
+#user_code-row-cursor {
+    height: 22px;
+    border-left: 2px solid rgb(0, 85, 255);
+    border-right: none;
+    width: 0;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
