@@ -1,16 +1,40 @@
 import { Keyboard } from "../keyboard/Keyboard";
+import { KeyboardAction } from "../keyboard/KeyboardAction";
 import { KeyboardInputResult, UserCodeEditorContext } from "../types/types";
 
-export abstract class BaseLine {
+interface IBaseLine {
+    putCursor(): void;
+    initRow(): void;
+    viewCode(code: string): string;
+
+    // Text edit methods
+    insertText(text: string, data: KeyboardInputResult): void;
+    deletePreviousChar(): void;
+    moveCursorLeft(): void;
+    moveCursorRight(): void;
+    moveCursorUp(): void;
+    moveCursorDown(): void;
+    pageUp(): void;
+    pageDown(): void;
+
+    copy(): void;
+    paste(): void;
+    cut(): void;
+    undo(): void;
+    redo(): void;
+    // End of text edit methods
+}
+
+export abstract class BaseLine implements IBaseLine {
     private userCodeBox: HTMLElement;
     protected context: UserCodeEditorContext;
     private settings: any;
     private cursor: any;
     private keyboard: any;
-    protected row: HTMLElement | undefined;
+    row: HTMLElement | undefined;
     rowText: string;
     rowCursorPosition: number;
-    protected view: any;
+    view: any;
     private shiftAdd: number;
 
     constructor(userCodeBox: HTMLElement, context: UserCodeEditorContext) {
@@ -29,10 +53,62 @@ export abstract class BaseLine {
 
         this.initRow();
     }
+    insertText(text: string, data: KeyboardInputResult): void {
+        // this.rowText += data.text;
+        this.rowText = this.rowText.slice(0, this.rowCursorPosition) + data.text + this.rowText.slice(this.rowCursorPosition);
+        this.shiftAdd = 1;
+    }
+    deletePreviousChar(): void {
+        this.rowText = this.rowText.slice(0, -1);
+    }
+    moveCursorLeft(): void {
+        if (this.rowCursorPosition > 0) {
+            this.rowCursorPosition--;
+        }
+    }
+    moveCursorRight(): void {
+        if (this.rowCursorPosition < this.rowText.length) {
+            this.rowCursorPosition++;
+        }
+    }
+    moveCursorUp(): void {
+        if (this.context.parentDate && (this.context.parentDate.id as number) > 0) {
+            if (this.context.parentDate && typeof this.context.parentDate.prevRow === 'function') {
+                this.context.parentDate.prevRow();
+            }
+        }
+    }
+    moveCursorDown(): void {
+        if (this.context.parentDate && typeof this.context.parentDate.nextRow === 'function') {
+            this.context.parentDate.nextRow();
+        }
+    }
+    pageUp(): void {
+        throw new Error("Method not implemented.");
+    }
+    pageDown(): void {
+        throw new Error("Method not implemented.");
+    }
+    copy(): void {
+        throw new Error("Method not implemented.");
+    }
+    paste(): void {
+        throw new Error("Method not implemented.");
+    }
+    cut(): void {
+        throw new Error("Method not implemented.");
+    }
+    undo(): void {
+        throw new Error("Method not implemented.");
+    }
+    redo(): void {
+        throw new Error("Method not implemented.");
+    }
 
     putCursor() {
         this.cursor.putCursor(this.rowCursorPosition + this.shiftAdd + 1, this);
         this.rowCursorPosition += this.shiftAdd;
+        this.shiftAdd = 0;
     }
 
     initRow() {
@@ -59,16 +135,7 @@ export abstract class BaseLine {
 
         this.row.addEventListener("keydown", (event: KeyboardEvent) => {
             const data: KeyboardInputResult = Keyboard.input(event);
-            if (data.simpleCharacter) {
-                this.rowText += data.text;
-                this.shiftAdd = 1;
-            } else {
-                console.log("else");
-            }
-            if (this.row && this.view) {
-                this.row.innerHTML = this.view.viewCode(this.rowText);
-                this.putCursor();
-            }
+            KeyboardAction.action(data, this);
         });
     }
 

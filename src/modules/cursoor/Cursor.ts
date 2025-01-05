@@ -13,6 +13,7 @@ interface ICursor {
     initCursor(): void;
     initPutCursor(event: MouseEvent, line: ILine): number;
     putCursor(nLetter: number, line: ILine): number;
+    moveCursorUp(): void;
 }
 
 export class Cursor implements ICursor {
@@ -23,7 +24,7 @@ export class Cursor implements ICursor {
 
     constructor() {
         console.log("Cursor constructor");
-        
+
         this.cursor = document.createElement("div");
         this.line = { row: document.createElement("div"), rowText: "" };
         this.flag = false;
@@ -75,4 +76,16 @@ export class Cursor implements ICursor {
         this.positionN = x / Settings.letterWidth;
         return x;
     }
+
+
+    moveCursorUp() {
+        const previousRow = this.line.row.previousElementSibling as HTMLElement;
+        if (previousRow) {
+            const previousRowText = previousRow.textContent || "";
+            const newLine: ILine = { row: previousRow, rowText: previousRowText };
+            const newPosition = Math.min(this.positionN, previousRowText.length);
+            this.putCursor(newPosition, newLine);
+        }
+    }
+
 }

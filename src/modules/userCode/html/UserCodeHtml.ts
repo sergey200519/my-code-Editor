@@ -9,10 +9,14 @@ export class UserCodeHtml extends UserCode {
         
         this.createNewRow();
         this.createNewRow();
+
+        console.log(this.rows, "html rows");
+        
     }
     createNewRow() {
-        const line = new LineHtml(this.userCodeBox, this.context);
-        // this.rows[this.rows.length + 1] = line.row;
+        const id = Object.keys(this.rows).length;
+        const line = new LineHtml(this.userCodeBox, {...this.context, parentDate: {...this.parentDate, id: id}}); 
+        this.rows[id] = line;
         // this.userCodeBox.appendChild(line.row);
     }
 }

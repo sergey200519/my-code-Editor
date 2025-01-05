@@ -2,9 +2,15 @@ import { Cursor } from "../cursoor/Cursor";
 import { Keyboard } from "../keyboard/Keyboard";
 import { Settings } from "../settings/Settings";
 
+
+
+type perentDate = {
+    [key: string]: (() => void) | number | null | undefined;
+}; 
 export interface UserCodeEditorContext {
     settings: Settings;
     cursor: Cursor;
+    parentDate?: perentDate;
 }
 
 export interface KeyboardInputResult {
