@@ -1,3 +1,4 @@
+import { Cursor } from "../cursoor/Cursor";
 import { Keyboard } from "../keyboard/Keyboard";
 import { KeyboardAction } from "../keyboard/KeyboardAction";
 import { KeyboardInputResult, UserCodeEditorContext } from "../types/types";
@@ -29,7 +30,7 @@ export abstract class BaseLine implements IBaseLine {
     private userCodeBox: HTMLElement;
     protected context: UserCodeEditorContext;
     private settings: any;
-    private cursor: any;
+    private cursor: Cursor;
     private keyboard: any;
     row: HTMLElement | undefined;
     rowText: string;
@@ -72,15 +73,18 @@ export abstract class BaseLine implements IBaseLine {
         }
     }
     moveCursorUp(): void {
-        if (this.context.parentDate && (this.context.parentDate.id as number) > 0) {
-            if (this.context.parentDate && typeof this.context.parentDate.prevRow === 'function') {
-                this.context.parentDate.prevRow();
+        if (this.context.parentData && (this.context.parentData.id as number) > 0) {
+            if (this.context.parentData && typeof this.context.parentData.prevRow === 'function') {
+                console.log(this.context.parentData.id);
+                
+                this.context.parentData.prevRow(this.context.parentData.id);
+                
             }
         }
     }
     moveCursorDown(): void {
-        if (this.context.parentDate && typeof this.context.parentDate.nextRow === 'function') {
-            this.context.parentDate.nextRow();
+        if (this.context.parentData && typeof this.context.parentData.nextRow === 'function') {
+            this.context.parentData.nextRow(this.context.parentData.id);
         }
     }
     pageUp(): void {
@@ -106,7 +110,7 @@ export abstract class BaseLine implements IBaseLine {
     }
 
     putCursor() {
-        this.cursor.putCursor(this.rowCursorPosition + this.shiftAdd + 1, this);
+        this.cursor.setCursor(this.rowCursorPosition + this.shiftAdd + 1, this);
         this.rowCursorPosition += this.shiftAdd;
         this.shiftAdd = 0;
     }
@@ -129,8 +133,8 @@ export abstract class BaseLine implements IBaseLine {
         });
 
         this.row.addEventListener("click", (event: MouseEvent) => {
-            this.cursor.initPutCursor(event, this);
-            this.rowCursorPosition = this.cursor.positionN;
+            this.cursor.updateCursorPositionEvent(event, this);
+            this.rowCursorPosition = this.cursor.positionIndex;
         });
 
         this.row.addEventListener("keydown", (event: KeyboardEvent) => {

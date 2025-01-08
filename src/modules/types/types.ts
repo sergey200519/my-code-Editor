@@ -1,16 +1,18 @@
 import { Cursor } from "../cursoor/Cursor";
-import { Keyboard } from "../keyboard/Keyboard";
 import { Settings } from "../settings/Settings";
 
 
+interface Constructor<T = any> {
+    new (...args: any[]): T;
+}
 
 type perentDate = {
-    [key: string]: (() => void) | number | null | undefined;
+    [key: string]: Function | number | null | undefined | any;
 }; 
 export interface UserCodeEditorContext {
     settings: Settings;
     cursor: Cursor;
-    parentDate?: perentDate;
+    parentData?: perentDate;
 }
 
 export interface KeyboardInputResult {

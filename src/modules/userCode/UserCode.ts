@@ -9,22 +9,24 @@ interface IUserCode {
     userCodeBox: HTMLElement;
     context: UserCodeEditorContext;
     rows: IRows;
-    parentDate: {
-        nextRow: () => void;
-        prevRow: () => void;
+    parentData: {
+        nextRow: (id: number) => void;
+        prevRow: (id: number) => void;
+        self?: UserCode;
     };
 
-    nextRow(): void;
-    prevRow(): void;
+    nextRow(id: number): void;
+    prevRow(id: number): void;
 }
 
 export class UserCode implements IUserCode {
     userCodeBox: HTMLElement;
     context: UserCodeEditorContext;
     rows: IRows;
-    parentDate: {
-        nextRow: () => void;
-        prevRow: () => void;
+    parentData: { 
+        nextRow: (id: number) => void;
+        prevRow: (id: number) => void;
+        self?: UserCode;
     };
 
     constructor(userCodeBox: HTMLElement, context: UserCodeEditorContext) {
@@ -32,14 +34,24 @@ export class UserCode implements IUserCode {
         this.context = context;
 
         this.rows = {};
-        this.parentDate = {
+        this.parentData = {
             nextRow: this.nextRow,
-            prevRow: this.prevRow,
+            prevRow: this.prevRow.bind(this),
+            self: this,
         };
+        console.log("initial base", this);
+        
     }
 
-    nextRow() {
+    nextRow(id: number) {
+
         // this.context.cursor.putCursor(0, this.rows[0].row as HTMLElement);
     }
-    prevRow() {}
+    prevRow(id: number) {
+        const newRow = this.rows[id - 1];
+        if (newRow) {
+            this.context.cursor.moveCursorToLine(newRow, 0);
+            // this.context.cursor.putCursor(0, mewRow.row as HTMLElement);
+        }
+    }
 }

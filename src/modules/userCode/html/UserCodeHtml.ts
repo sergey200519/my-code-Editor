@@ -15,7 +15,7 @@ export class UserCodeHtml extends UserCode {
     }
     createNewRow() {
         const id = Object.keys(this.rows).length;
-        const line = new LineHtml(this.userCodeBox, {...this.context, parentDate: {...this.parentDate, id: id}}); 
+        const line = new LineHtml(this.userCodeBox, {...this.context, parentData: {...this.parentData, id: id}}); 
         this.rows[id] = line;
         // this.userCodeBox.appendChild(line.row);
     }

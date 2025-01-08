@@ -16,6 +16,7 @@ export class LineHtml extends BaseLine {
         
         if (this.row) {
             this.row.classList.add(`${Settings.rowClass}-html`);
+            this.row.setAttribute("data-html-row-id", this.context.parentData?.id);
         }
         this.view = new ViewCodeHtml(this, this.context);
     }
