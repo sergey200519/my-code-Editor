@@ -8,19 +8,23 @@ export class KeyboardAction {
         if (simpleCharacter) {
             // Добавить символ в строку
             line.insertText(text, keyboardres);
+            line.putCursor();
         } else if (specialKey) {
             switch (specialKey) {
                 case 'Backspace':
                     // Удалить символ перед курсором
                     line.deletePreviousChar();
+                    line.putCursor();
                     break;
                 case 'ArrowLeft':
                     // Переместить курсор влево
                     line.moveCursorLeft();
+                    line.putCursor();
                     break;
                 case 'ArrowRight':
                     // Переместить курсор вправо
                     line.moveCursorRight();
+                    line.putCursor();
                     break;
                 case 'ArrowUp':
                     // Переместить курсор вверх
@@ -71,6 +75,6 @@ export class KeyboardAction {
         if (row && line.view) {
             row.innerHTML = line.view.viewCode(line.rowText);
         }
-        line.putCursor();
+        
     }
 }

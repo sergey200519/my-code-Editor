@@ -104,6 +104,7 @@ export class Cursor implements ICursor {
     line: BaseLine | null | undefined;
     isActive: boolean;
     positionIndex: number;
+    toggleBlinkingInterval: NodeJS.Timeout
 
     constructor() {
         console.log("Cursor initialized");
@@ -113,7 +114,7 @@ export class Cursor implements ICursor {
         this.isActive = false;
         this.positionIndex = 0;
 
-        this.toggleBlinking();
+        this.toggleBlinkingInterval = this.toggleBlinking();
     }
 
     private createCursorElement(): HTMLElement {
@@ -123,15 +124,13 @@ export class Cursor implements ICursor {
         return cursor;
     }
 
-    private toggleBlinking(isDelete?: boolean): void {
+    private toggleBlinking(isDelete?: boolean): NodeJS.Timeout {
         const interval = setInterval(() => {
             if (this.isActive && this.cursor && this.cursor.parentNode) {
                 this.cursor.classList.toggle("none");
             }
-        }, 50000000);
-        if (isDelete) {
-            clearInterval(interval);
-        }
+        }, 500);
+        return interval;
     }
 
 
@@ -162,12 +161,14 @@ export class Cursor implements ICursor {
     setCursor(position: number, line: BaseLine): void {
         const x = this.calculateCursorPosition(position * Settings.letterWidth, line);
         if (this.cursor) {
+            clearInterval(this.toggleBlinkingInterval);
             this.cursor.style.left = `${x}px`;
 
             line.row?.appendChild(this.cursor);
             this.line = line;
             this.isActive = true;
             this.positionIndex = x / Settings.letterWidth;
+            this.toggleBlinkingInterval = this.toggleBlinking();
         }
 
     }
@@ -181,7 +182,7 @@ export class Cursor implements ICursor {
 
 
     moveCursorToLine(line: BaseLine, positionIndex: number): void {
-        this.toggleBlinking(true);
+        clearInterval(this.toggleBlinkingInterval);
         console.log(this.cursor, this.line?.row);
 
         this.removeCursor();
@@ -202,6 +203,7 @@ export class Cursor implements ICursor {
         console.log(line.row);
 
         this.cursor = tempCursor;
+        this.toggleBlinkingInterval = this.toggleBlinking();
         //this.cursor.parentElement = line.row;
         //}
         //this.positionIndex = positionIndex;
