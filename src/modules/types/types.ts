@@ -1,5 +1,5 @@
-import { Cursor } from "../cursoor/Cursor";
-import { Settings } from "../settings/Settings";
+import { Cursor } from "../Cursor/Cursor";
+import { Settings } from "../Settings/Settings";
 
 
 interface Constructor<T = any> {
@@ -10,7 +10,6 @@ type perentDate = {
     [key: string]: Function | number | null | undefined | any;
 }; 
 export interface UserCodeEditorContext {
-    settings: Settings;
     cursor: Cursor;
     parentData?: perentDate;
 }

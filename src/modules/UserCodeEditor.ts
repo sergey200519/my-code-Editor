@@ -1,7 +1,7 @@
-import { UserCodeHtml  } from "./userCode/html/UserCodeHtml";
-import { Cursor } from "./cursoor/Cursor";
-import { Keyboard } from "./keyboard/Keyboard";
-import { Settings } from "./settings/Settings";
+import { UserCodeHtml  } from "./UserCode/html/UserCodeHtml";
+import { Cursor } from "./Cursor/Cursor";
+import { Keyboard } from "./Keyboard/Keyboard";
+import { Settings } from "./Settings/Settings";
 import { UserCodeEditorContext } from "./types/types";
 
 
@@ -20,7 +20,6 @@ export class UserCodeEditor {
         this.cursor = new Cursor();
 
         this.context = {
-            settings: this.settings,
             cursor: this.cursor
         };
 

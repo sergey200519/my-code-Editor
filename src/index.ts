@@ -1,5 +1,5 @@
 import "./style.scss";
-import { Settings } from "./modules/settings/Settings";
+import { Settings } from "./modules/Settings/Settings";
 import { UserCodeEditor } from "./modules/UserCodeEditor";
 
 const UserCodeBox: HTMLElement = document.querySelector(".code_box .code_part") as HTMLElement;
